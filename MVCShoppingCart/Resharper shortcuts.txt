@@ -1,0 +1,13 @@
+﻿CTRL + R + R:  Rename
+CTRL + R + V:  Introduce Variable (when you want to factor out variables of a complex expression.)
+CTRL + R + F:  Introduce Field 
+CTRL+F12: member navigation window
+CTRL+SHIFT+N: file navigation window
+CTRL+P: show parameter overloads info of a method
+Alt + Up/Down: Go to next/previous member
+Alt + Up/Down: Moving methods and properties up and down
+Alt + F12 / Shift + Alt + F12: Go to next/previous error in the solution
+Ctrl + [: Go to containing method/class
+Ctrl + Shift + [: Select containing method/class
+Ctrl + Shift + ,: Go to recent edits
+Shift + Alt + L: Locate current opened file in solution explorer
