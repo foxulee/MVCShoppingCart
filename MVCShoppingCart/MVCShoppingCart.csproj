@@ -158,6 +158,8 @@
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\PagesController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopController.cs" />
+    <Compile Include="Areas\Admin\Models\ViewModels\Shop\OrdersForAdminViewModel.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\PagesController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
@@ -166,13 +168,24 @@
     </Compile>
     <Compile Include="Models\Data\CategoryDto.cs" />
     <Compile Include="Models\Data\Db.cs" />
+    <Compile Include="Models\Data\OrderDetailsDto.cs" />
+    <Compile Include="Models\Data\OrderDto.cs" />
     <Compile Include="Models\Data\PageDto.cs" />
     <Compile Include="Models\Data\ProductDto.cs" />
+    <Compile Include="Models\Data\RoleDto.cs" />
     <Compile Include="Models\Data\SidebarDto.cs" />
+    <Compile Include="Models\Data\UserDto.cs" />
+    <Compile Include="Models\Data\UserRoleDto.cs" />
+    <Compile Include="Models\ViewModels\Account\LoginUserViewModel.cs" />
+    <Compile Include="Models\ViewModels\Account\OrdersForUserViewModel.cs" />
+    <Compile Include="Models\ViewModels\Account\UserNavPartialViewModel.cs" />
+    <Compile Include="Models\ViewModels\Account\UserProfileViewModel.cs" />
+    <Compile Include="Models\ViewModels\Account\UserViewModel.cs" />
     <Compile Include="Models\ViewModels\Cart\CartViewModel.cs" />
     <Compile Include="Models\ViewModels\Pages\PageViewModel.cs" />
     <Compile Include="Models\ViewModels\Pages\SidebarViewModel.cs" />
     <Compile Include="Models\ViewModels\Shop\CategoryViewModel.cs" />
+    <Compile Include="Models\ViewModels\Shop\OrderViewModel.cs" />
     <Compile Include="Models\ViewModels\Shop\ProductViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -519,6 +532,7 @@
     <Content Include="Areas\Admin\Views\Shop\AddProduct.cshtml" />
     <Content Include="Areas\Admin\Views\Shop\Products.cshtml" />
     <Content Include="Areas\Admin\Views\Shop\EditProduct.cshtml" />
+    <Content Include="Areas\Admin\Views\Shop\Orders.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\ckeditor\ckeditor.php" />
     <Content Include="Scripts\ckeditor\ckeditor_basic.js" />
@@ -907,9 +921,14 @@
     <Content Include="Views\Cart\CartPartial.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Cart\AddToCartPartial.cshtml" />
+    <Content Include="Views\Account\CreateAccount.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\UserNavPartial.cshtml" />
+    <Content Include="Views\Account\UserProfile.cshtml" />
+    <Content Include="Views\Cart\PaypalPartial.cshtml" />
+    <Content Include="Views\Account\Orders.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="fileman\aspnet_client\system_web\2_0_50727\" />
     <Folder Include="fileman\aspnet_client\system_web\4_0_30319\" />
     <Folder Include="fileman\tmp\" />

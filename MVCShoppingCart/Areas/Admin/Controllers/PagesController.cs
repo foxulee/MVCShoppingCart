@@ -1,12 +1,13 @@
-﻿using System;
+﻿using MVCShoppingCart.Models.Data;
+using MVCShoppingCart.Models.ViewModels.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using MVCShoppingCart.Models.Data;
-using MVCShoppingCart.Models.ViewModels.Pages;
 
 namespace MVCShoppingCart.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PagesController : Controller
     {
         // GET: Admin/Pages

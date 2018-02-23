@@ -1,7 +1,8 @@
 ﻿@model MVCShoppingCart.Models.ViewModels.Shop.ProductViewModel
 
 @{
-    ViewBag.Title = "ProductDetails";
+    ViewBag.Title = "Product Details";
+    ViewBag.Category = TempData["category"];
 }
 
 <h2>@Model.Name</h2>

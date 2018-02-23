@@ -1,16 +1,18 @@
-﻿using System;
+﻿using MVCShoppingCart.Areas.Admin.Models.ViewModels.Shop;
+using MVCShoppingCart.Models.Data;
+using MVCShoppingCart.Models.ViewModels.Shop;
+using PagedList;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
-using MVCShoppingCart.Models.Data;
-using MVCShoppingCart.Models.ViewModels.Shop;
-using PagedList;
 
 namespace MVCShoppingCart.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ShopController : Controller
     {
         // GET: Admin/Shop/Categories
@@ -483,7 +485,7 @@ namespace MVCShoppingCart.Areas.Admin.Controllers
                     var originalDirectory = new DirectoryInfo($"{Server.MapPath(@"\")}Images\\Uploads");
 
                     string pathStr1 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Gallery");
-                    string pathStr2  = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Gallery\\Thumbs");
+                    string pathStr2 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Gallery\\Thumbs");
 
                     //Set image paths
                     var path1 = $"{pathStr1}\\{file.FileName}";
@@ -512,7 +514,62 @@ namespace MVCShoppingCart.Areas.Admin.Controllers
                 System.IO.File.Delete(fullPath2);
         }
 
-       
+        // GET: Admin/Shop/Orders
+        public ActionResult Orders()
+        {
+            // Init list of OrderForAdminVm
+            var ordersForAdminViewModelList = new List<OrdersForAdminViewModel>();
+
+            using (Db db = new Db())
+            {
+                // Init list of OrderViewModel list
+                List<OrderViewModel> orders = db.Orders.ToList().Select(o => new OrderViewModel(o)).ToList();
+                foreach (var order in orders)
+                {
+                    // Init the product dict
+                    Dictionary<string, int> productAndQtyDict = new Dictionary<string, int>();
+
+                    // Declare total
+                    decimal total = 0m;
+
+                    // Get username
+                    string username = db.Users.FirstOrDefault(u => u.Id == order.UserId)?.Username;
+
+                    //Init list of OderDetailDto
+                    List<OrderDetailsDto> orderDetailsList = db.OrderDetails.Where(o => o.OrderId == order.OrderId).ToList();
+
+                    foreach (var orderDetailsDto in orderDetailsList)
+                    {
+                        // Get product info
+                        var productDto = db.Products.First(p => p.Id == orderDetailsDto.ProductId);
+                        string productName = productDto.Name;
+                        decimal productPrice = productDto.Price;
+                        int productQty = orderDetailsDto.Quantity;
+
+                        // Add to product dict
+                        if (!String.IsNullOrEmpty(productName))
+                            productAndQtyDict.Add(productName, productQty);
+
+                        // Get total
+                        total += productPrice * productQty;
+                    }
+
+                    // Add to orderForAdminVMList
+                    ordersForAdminViewModelList.Add(new OrdersForAdminViewModel
+                    {
+                        CreatedAt = order.CreatedAt,
+                        OrderNumber = order.OrderId,
+                        ProductsAndQty = productAndQtyDict,
+                        Total = total,
+                        Username = username
+                    });
+                }
+            }
+
+            return View(ordersForAdminViewModelList);
+        }
+
+
     }
 }
 

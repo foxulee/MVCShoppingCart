@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Cart Details";
+    int count = 1;
 }
 
 <h2>Cart Details</h2>
@@ -75,26 +76,30 @@ else
 
     </table>
 
-    @*<div class="paypaldiv">
-            <form class="paypalform" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
-                <input type="hidden" name="cmd" value="_cart">
-                <input type="hidden" name="upload" value="1">
-                <input type="hidden" name="business" value="jultranet-facilitator@gmail.com">
+    <div class="paypaldiv">
+        <form class="paypalform" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+            <input type="hidden" name="cmd" value="_cart">
+            <input type="hidden" name="upload" value="1">
+            <input type="hidden" name="business" value="fox19982001-facilitator@hotmail.com">
 
-                @foreach (var item in Model)
-                {
-                    <input type="hidden" name="item_name_@count" value="@item.ProductName">
-                    <input type="hidden" name="amount_@count" value="@item.Price">
-                    <input type="hidden" name="quantity_@count" value="@item.Quantity">
-                    count++;
-                }
+            @foreach (var item in Model)
+            {
+                <input type="hidden" name="item_name_@count" value="@item.ProductName">
+                <input type="hidden" name="amount_@count" value="@item.ProductPrice">
+                <input type="hidden" name="quantity_@count" value="@item.Quantity">
+                count++;
+            }
 
-                <input type="hidden" name="currency_code" value="USD">
-                <input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
-            </form>
-        </div>*@
+            <input type="hidden" name="currency_code" value="USD">
+            <input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+        </form>
+    </div>
     <br />
-    <a href="#" class="placeorder btn btn-primary pull-right">Checkout</a>
+
+
+    <a href="#" class="placeorder btn btn-primary pull-right" data-authenticated="@Request.IsAuthenticated">Checkout</a>
+
+
 }
 @section Scripts {
     <script>
@@ -182,6 +187,7 @@ else
             */
 
             $("a.removeproduct").click(function (e) {
+
                 e.preventDefault();
 
                 var $this = $(this);
@@ -200,6 +206,13 @@ else
             */
 
             $("a.placeorder").click(function (e) {
+
+                // Make sure user is logging in to check out
+                if ($(this).data("authenticated") === 'False') {
+                    window.location.href = "/account/login";
+                    return false;
+                }
+
                 e.preventDefault();
 
                 var $this = $(this);

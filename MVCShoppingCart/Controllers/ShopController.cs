@@ -1,11 +1,9 @@
-﻿using System;
+﻿using MVCShoppingCart.Models.Data;
+using MVCShoppingCart.Models.ViewModels.Shop;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using MVCShoppingCart.Models.Data;
-using MVCShoppingCart.Models.ViewModels.Shop;
 
 namespace MVCShoppingCart.Controllers
 {
@@ -17,7 +15,7 @@ namespace MVCShoppingCart.Controllers
             return RedirectToAction("Index", "Pages");
         }
 
-        public ActionResult CategoryMenuPartial()
+        public ActionResult CategoryMenuPartial(string slug)
         {
             // Declare list of CategoryViewModel
             List<CategoryViewModel> categoryViewModels;
@@ -28,6 +26,8 @@ namespace MVCShoppingCart.Controllers
                 categoryViewModels = db.Categories
                         .ToList().OrderBy(c => c.Sorting).Select(c => new CategoryViewModel(c)).ToList();
             }
+
+            ViewBag.Category = slug;
 
             return PartialView(categoryViewModels);
         }
@@ -54,6 +54,8 @@ namespace MVCShoppingCart.Controllers
                 ViewBag.Categoryname = db.Products.First(p => p.CategoryId == categoryId).CategoryName;
             }
 
+            TempData["category"] = slug;
+
             return View(productViewModelList);
         }
 
@@ -65,7 +67,8 @@ namespace MVCShoppingCart.Controllers
             ProductViewModel productViewModel;
             ProductDto productDto;
 
-            // Init product id
+            // Init product id and categorySlug
+            string categorySlug = "";
             int id = 0;
 
             using (Db db = new Db())
@@ -75,8 +78,9 @@ namespace MVCShoppingCart.Controllers
                 if (productDto == null)
                     return RedirectToAction("Index", "shop");
 
-                // Get id
+                // Get id and categorySlug
                 id = productDto.Id;
+                categorySlug = productDto.Category.Slug;
 
                 // Init PVM
                 productViewModel = new ProductViewModel(productDto);
@@ -86,8 +90,12 @@ namespace MVCShoppingCart.Controllers
                 .EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + id + "/Gallery/Thumbs"))
                 .Select(Path.GetFileName);
 
+            TempData["category"] = categorySlug;
+
             return View("ProductDetails", productViewModel);
         }
+
+
 
     }
 }

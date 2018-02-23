@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MVCShoppingCart.Models.Data;
+using MVCShoppingCart.Models.ViewModels.Cart;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Net;
+using System.Net.Mail;
 using System.Web.Mvc;
-using MVCShoppingCart.Models.Data;
-using MVCShoppingCart.Models.ViewModels.Cart;
 
 namespace MVCShoppingCart.Controllers
 {
@@ -176,7 +177,79 @@ namespace MVCShoppingCart.Controllers
 
             // Remove from the cart
             cart.Remove(cartViewModel);
-            
+
+        }
+
+        public ActionResult PaypalPartial()
+        {
+            var cart = Session["cart"] as List<CartViewModel>;
+            return PartialView(cart);
+        }
+
+
+        // POST: /Cart/PlaceOrder
+        [HttpPost]
+        public void PlaceOrder()
+        {
+            // Check if logged in
+            if (User.Identity == null)
+                Redirect("/account/login");
+
+            // Get cart list
+            var cart = Session["cart"] as List<CartViewModel> ?? new List<CartViewModel>();
+
+            // Get username
+            string username = User.Identity.Name;
+
+            // Declare orderId
+            int orderId;
+
+            using (Db db = new Db())
+            {
+                // Init OrderDto
+                int userId = db.Users.First(u => u.Username == username).Id;
+                var orderDto = new OrderDto()
+                {
+                    CreatedAt = DateTime.Now,
+                    // Get user id
+                    UserId = userId
+                };
+
+                // Add to OrderDto and save
+                db.Orders.Add(orderDto);
+                db.SaveChanges();
+
+                // Get inserted id
+                orderId = orderDto.OrderId;
+
+                // Init OrderDetailsDTO
+                OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
+
+                // Add to OrderDetailsDTO
+                foreach (var item in cart)
+                {
+                    orderDetailsDto.OrderId = orderId;
+                    orderDetailsDto.UserId = userId;
+                    orderDetailsDto.ProductId = item.ProductId;
+                    orderDetailsDto.Quantity = item.Quantity;
+
+                    db.OrderDetails.Add(orderDetailsDto);
+                    db.SaveChanges();
+                }
+            }
+
+            // Email admin
+            // Send to fake smtp testing server https://mailtrap.io/
+
+            var client = new SmtpClient("smtp.mailtrap.io", 2525)
+            {
+                Credentials = new NetworkCredential("af889f100755e4", "aa926e848dc049"),
+                EnableSsl = true
+            };
+            client.Send("from@example.com", "to@example.com", "New order", $"You have a new order. Order number {orderId}");
+
+            // Reset session
+            Session["cart"] = null;
         }
     }
 }
