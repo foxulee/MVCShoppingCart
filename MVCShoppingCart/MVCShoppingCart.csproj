@@ -533,6 +533,10 @@
     <Content Include="Areas\Admin\Views\Shop\Products.cshtml" />
     <Content Include="Areas\Admin\Views\Shop\EditProduct.cshtml" />
     <Content Include="Areas\Admin\Views\Shop\Orders.cshtml" />
+    <None Include="Properties\PublishProfiles\MVCShoppingCart - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\MVCShoppingCart-20180403111542635-dev-as - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\MVCShoppingCart20180403110247 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\MVCShoppingCart20180403122258 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\ckeditor\ckeditor.php" />
     <Content Include="Scripts\ckeditor\ckeditor_basic.js" />
