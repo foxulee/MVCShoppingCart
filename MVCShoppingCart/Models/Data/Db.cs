@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace MVCShoppingCart.Models.Data
 {
@@ -13,5 +14,11 @@ namespace MVCShoppingCart.Models.Data
         public DbSet<UserRoleDto> UserRoles { get; set; }
         public DbSet<OrderDto> Orders { get; set; }
         public DbSet<OrderDetailsDto> OrderDetails { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+        }
     }
 }
